@@ -1,0 +1,81 @@
+<html lang="en">
+
+<head>
+  {{>headerlinks}}
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+  {{>navbar}}
+  <!-- header section -->
+
+  <div class="container-fluid main_header">
+    <div class="row">
+      <div class="col-md-10 col-12 mx-auto">
+        <div class="main_control">
+          <form class="temp_form">
+            <input type="text" id="cityname" placeholder="Enter Your City Name" autocomplete="off">
+            <input type="submit" value="search" id="submitButton">
+          </form>
+        </div>
+        <div class="tempinformation">
+          <div class="top_layer">
+            <p id="day">Tuesday</p>
+            <p id="today_data">13 OCT</p>
+          </div>
+          <div class="main_layer">
+            <p id="city_name">Get Output Here</p>
+            <div class="middle_layer data_hide">
+              <p id="temp"><span>0</span> <sup>o</sup>C</p>
+              <p id="temp_status"><i class="fa fa-cloud" aria-hidden="true"></i></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {{>footer}}
+
+    {{!--
+    <script src="../../public/js/main.js"></script> --}}
+
+    <script>
+      
+
+        const submitButton = document.getElementById('submitButton')
+        const cityname = document.getElementById('cityname')
+        const city_name = document.getElementById('city_name')
+        const temp=document.getElementById('temp')
+        const temp_status=document.getElementById('temp_status')
+
+
+        const getInfo = async (event) => {
+          event.preventDefault();
+          let cityval = cityname.value;
+          if (cityval === "") {
+            city_name.innerText = `plzz write the name before the search`;
+          } else {
+            try {
+              let url = `https://api.openweathermap.org/data/2.5/weather?q=${cityval}&appid=90e6c4097bc76acc4f2178710d4068a4`;
+              const response = await fetch(url);
+              const data = await response.json();
+              const arrydata=[data];
+              city_name.innerText=`${ arrydata[0].name},${arrydata[0].sys.country}`;
+              temp.innerText=arrydata[0].main.temp;
+              temp_status.innerText=arrydata[0].weather[0].main;
+
+            }
+            catch {
+              city_name.inerText = `plz enter tha city name properly`;
+            }
+          }
+        }
+
+
+
+        submitButton.addEventListener('click', getInfo);
+
+    </script>
+
+</body>
+
+</html>
